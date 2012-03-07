@@ -1,7 +1,7 @@
 Voipzilla Socket for PHP
 ===========
 
-### A class to connect to send commands and receive data usig the voipzilla socket API
+### A class to connect, send commands and receive data using the voipzilla socket API
 
 About
 ========
@@ -36,4 +36,5 @@ from *Mobtelecom Dev Team*.
 License & Legal
 ==============
 
-*See LICENSE.txt file*
+Utilizing GNU LESSER GENERAL PUBLIC LICENSE *Version 3, 29 June 2007*
+**See LICENSE.txt file**
