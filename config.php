@@ -1,11 +1,11 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
 /**
  * Socket configuration to access voipzilla servers
  * 
  * @author Mob Dev Team
  * @version 0.1 
- * @package voipzilla-socket
+ * @package Voipzilla-API-for-PHP
  * 
  */
 
@@ -102,9 +102,8 @@ if(!array_key_exists('log', $config))
 -----------------------------------*/
 $config["log"]["structure"] = 
     array(
-        "name-format"   => "Y-m-d", /* Name format using date 
-                                      See also http://php.net/manual/en/function.date.php */
+        "name-format"   => "Y-m-d", // Name format using date. See also http://php.net/manual/en/function.date.php
         "extension"     => ".log",
         "directory"     => "log/", // Relative path
-        "log-prefix"    => "[H:i:s]",
+        "log-prefix"    => "[H:i:s]", // log-prefix using date too
         );

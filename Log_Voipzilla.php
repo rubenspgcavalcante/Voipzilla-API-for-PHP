@@ -1,11 +1,11 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php //if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Log class to Voipzilla api
  * 
  * @author Mob Dev Team
  * @version 0.1 
- * @package voipzilla-socket
+ * @package Voipzilla-API-for-PHP
  * 
  */
 
@@ -15,10 +15,11 @@ class Log_Voipzilla{
     private static $logConf;
 
 	/**
-	 * Verfify if the socket is connected
+	 * Saves a newline log
 	 *
 	 * @access public
-	 * @return bool is connected or not
+	 * @param string $log what will be writen
+	 * @return string|NULL what was writed or NULL if wasn't possible open the file
 	 */
 	static function save($log){
 		global $config;
@@ -29,8 +30,10 @@ class Log_Voipzilla{
 			return NULL;
 		}
 		$prefix = date(self::$logConf["log-prefix"]);
-		fwrite($file, $prefix.$log."\n");
+		$write = $prefix.$log."\n";
+		fwrite($file, $write);
 		fclose($file);
+		return $write;
 	}
 
 
