@@ -139,7 +139,7 @@ class Voipzilla_Socket{
 	 *
 	 * @access public
      * @param string $cmd command
-     * @param array $params("prefix","data") parameters to the command
+     * @param array $params ("param1" => "data1", "param2" => "data2", ...)
 	 * @return string|NULL the server response
 	 */
     function command($cmd, $params){
@@ -156,8 +156,14 @@ class Voipzilla_Socket{
             $this->_logError();
             throw new Exception(socket_last_error($this->socket));
         }
-
-        $request = $params["prefix"]." ".$params["data"]."\n\n\n";
+        /*
+        * Now we send the parameter(s)
+        */
+        $request = "";
+        foreach ($params as $index => $data) {
+            $request .= $index." ".$data."\n"; 
+        }
+        $request .= "\n\n"; // end command
         $res = socket_write($this->socket, $request, strlen($request));
         if($res != strlen($request)){
             $this->_logError();
