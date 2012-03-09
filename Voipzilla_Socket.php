@@ -3,6 +3,7 @@
 /**
  * Socket prepared to connect into Voipzilla Server
  * 
+ *
  * @author Mob Dev Team
  * @version 0.1 
  * @package voipzilla-API-for-PHP
@@ -76,7 +77,6 @@ class Voipzilla_Socket{
 	 * Create a new connection object
 	 *
 	 * @access private
-	 * @return object|NULL returns socket object or NULL
 	 */
     private function _connect(){
         $this->socket = socket_create(
@@ -86,14 +86,14 @@ class Voipzilla_Socket{
 
         if(!socket_connect($this->socket, $this->sockConfig["server"], $this->sockConfig["port"])){
             $this->_logError();
-            return NULL;
+            throw new Exception(socket_last_error($this->socket));
         }
-        $buff  = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
+        @$buff  = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
         if($buff === false){
             $this->_logError();
             $this->_log("Connection NOT succefully");
             $this->_disconect();
-            return NULL;
+            throw new Exception(socket_last_error($this->socket));
         }
         else $this->_log($buff."<CONNECTED NOW>");
 
@@ -114,16 +114,15 @@ class Voipzilla_Socket{
             $this->_disconect();
         }
 
-        $buff = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
+        @$buff = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
         if($buff === false){
             $this->_logError();
             $this->_disconect();
+            throw new Exception(socket_last_error($this->socket));
         }
         else{
             $this->alive = true;
         }
-        return NULL;
-
     }
     
     private function _disconect(){
@@ -155,7 +154,7 @@ class Voipzilla_Socket{
         $res = socket_write($this->socket, $command, strlen($command));
         if($res != strlen($command)){
             $this->_logError();
-            return NULL;
+            throw new Exception(socket_last_error($this->socket));
         }
 
         $request = $params["prefix"]." ".$params["data"]."\n\n\n";
@@ -163,14 +162,14 @@ class Voipzilla_Socket{
         if($res != strlen($request)){
             $this->_logError();
             $this->_disconect();
-            return NULL;
+            throw new Exception(socket_last_error($this->socket));
         }
         else{
-            $res = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
+            @$res = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
             if($res === false){
                 $this->_logError();
                 $this->_disconect();
-                return NULL;
+                throw new Exception(socket_last_error($this->socket));
             }        
         }
         $this->_disconect();
