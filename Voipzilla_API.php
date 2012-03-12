@@ -10,6 +10,7 @@
  * 
  */
 
+//TODO: dinamic model loading
 require_once( dirname(__FILE__) . '/models/Client_Model.php' );
 require_once( dirname(__FILE__) . '/models/Ppcc_Model.php' );
 require_once( dirname(__FILE__) . '/Log_Voipzilla.php' );
@@ -18,7 +19,7 @@ require_once( dirname(__FILE__) . '/config.php' );
 class Voipzilla_API{
 	var $client;
 	var $ppcc;
-	var $models;
+	var $daemonConf;
 
 	/**
     * Daemon counter
@@ -28,7 +29,8 @@ class Voipzilla_API{
 
 	function __construct(){
 		global $config;
-		$cnt 	= 0;
+		$this->daemonConf	= $config["voipzilla"]["daemon"];
+		$this->cnt 			= 1;
 		//TODO: dinamic model loading
 		$this->client 	= new Client_Model();
 		$this->ppcc 	= new Ppcc_Model();
@@ -64,12 +66,12 @@ class Voipzilla_API{
 		$data = $pack["data"];
 		$log = "[Message][API Daemon] ";
 
-		if($cnt < $config["voipzilla"]["daemon"]["retries"]){
+		if($this->cnt < $this->daemonConf["retries"]){
 
-			$delay = $config["voipzilla"]["daemon"]["delay"];
+			$delay = $this->daemonConf["delay"];
 			Log_Voipzilla::save($log."Sleeping $delay seconds");
 			sleep($delay);
-			Log_Voipzilla::save($log."Trying $call $attr again. Try number: $cnt");
+			Log_Voipzilla::save($log."Trying $call $attr again. Try number: $this->cnt");
 			$this->cnt++;
 			$this->$call($model, $attr, $data);
 
@@ -105,11 +107,13 @@ class Voipzilla_API{
 			* Now, we call the apropriated model, if any exception occur we call the same
 			* method again, until the maximum tries was reached.
 			*/
-			return $this->$model->search($attr, $data);
+			$res = $this->$model->search($attr, $data);
+			$this->cnt = 1; // Everything OK! Reseting retries...
+			return $res;
 		}
 		catch(Exception $e){
 			$pack = array("model" => $model, "attr" => $attr, "data" => $data);
-			$this->_cronDaemon(__FUNCTION__, $pack);
+			$this->_connDaemon(__FUNCTION__, $pack);
 			return NULL;
 		}
 

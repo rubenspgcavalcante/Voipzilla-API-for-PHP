@@ -171,7 +171,15 @@ class Voipzilla_Socket{
             throw new Exception(socket_last_error($this->socket));
         }
         else{
-            @$res = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
+            $line = "";
+            $res  = "";
+
+            do{ 
+                @$line = socket_read($this->socket, 1024, $this->sockConfig["readtype"]);
+                $res .= $line;
+                $line = trim($line, "\n");
+            }while($line!="");
+
             if($res === false){
                 $this->_logError();
                 $this->_disconect();

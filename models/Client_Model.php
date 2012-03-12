@@ -70,7 +70,7 @@ require_once( dirname(__FILE__) . '/../Voipzilla_Socket.php' );
     * @uses Voipzilla_Socket::command() to get the information
     * @return string|NULL response of the server
     */
-	public function retrieve(){
+	public function retrieve($attr, $data){
 		if(!isset($attr) or !isset($data)) return NULL;
 		switch ($attr) {
 			case 'data':
@@ -102,14 +102,8 @@ require_once( dirname(__FILE__) . '/../Voipzilla_Socket.php' );
 				if(!array_key_exists("cliente", $data)){
 					return NULL;
 				}
-				if(array_key_exists("auth", $data)){
-					// Search with client-id and ani-id
-					$res = $this->sock->command("cli-search-auth", $data); 
-				}
-				else{
-					// Search only with client-id
-					$res = $this->sock->command("cli-retrieve-auth", $data);
-				}
+				// Search with client-id and/or ani-id
+				$res = $this->sock->command("cli-retrieve-auth", $data); 
 				break;
 
 			case 'cdr':
@@ -136,6 +130,7 @@ require_once( dirname(__FILE__) . '/../Voipzilla_Socket.php' );
 			default:
 				return "Command not found";
 		}
+		return $res;
 	}
 
     /**
