@@ -90,7 +90,7 @@ $config["voipzilla"]["user-info"] =
 
 /*-----------------------------------
 -
-===== Log configurations ======
+======= Log configurations =========
 -
 -----------------------------------*/
 if(!array_key_exists('log', $config))
@@ -107,3 +107,20 @@ $config["log"]["structure"] =
         "directory"     => "log/", // Relative path
         "log-prefix"    => "[H:i:s]", // log-prefix using date too
         );
+
+
+
+
+
+
+/*-----------------------------------
+-
+==== API general configurations =====
+-
+-----------------------------------*/
+
+$config["voipzilla"]["daemon"] =
+    array(
+        "retries"   => 5, //Number of times that the daemon will retry reconnect
+        "delay"     => 0.5, //Delay to another try, in seconds
+    );
