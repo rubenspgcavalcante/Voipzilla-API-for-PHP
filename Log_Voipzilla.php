@@ -3,7 +3,7 @@
 /**
  * Log class to Voipzilla api
  * 
- * @author Mob Dev Team
+ * @author Rubens Pinheiro
  * @version 0.1 
  * @package Voipzilla-API-for-PHP
  * 
