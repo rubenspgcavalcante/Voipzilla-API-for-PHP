@@ -4,7 +4,7 @@
  * Socket prepared to connect into Voipzilla Server
  * 
  *
- * @author Mob Dev Team
+ * @author Rubens Pinheiro
  * @version 0.1 
  * @package voipzilla-API-for-PHP
  * 
